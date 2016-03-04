@@ -52,18 +52,15 @@ static void help(void)
 
 void proccmd(char * cmd)
 {
-	if (strcmp(cmd, "clear") == 0) {
+	if (strcmp(cmd, "clear") == 0)
 		clrscr();
-		gotoxy(0, 0);
-	}
 	else if (strcmp(cmd, "about") == 0)
 		about();
 	else if (strcmp(cmd, "reboot") == 0) {
 		printk("\nrebooting...");
 		timer_wait(10);
 		reboot();
-	}
-	else if (strcmp(cmd, "help") == 0)
+	} else if (strcmp(cmd, "help") == 0)
 		help();
 	else
 		printk("\nshell : %s : command not found\n", cmd);

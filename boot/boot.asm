@@ -35,9 +35,6 @@ start:
 	hlt
 	jmp .hang
 
-
-
-
 global gdt_load
 
 extern gdtp

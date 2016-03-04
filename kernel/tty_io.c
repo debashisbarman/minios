@@ -36,7 +36,7 @@ void do_kbd_intr(cpu_state_t * cpu)
 		ch = toascii(scancode);
 
 		switch (ch) {
-			case '\b' :	if (csr_x < strlen("shell@minios $ "))
+			case '\b' :	if (csr_x < strlen("shell@minios $ ") + 1)
 						/* do nothing */;
 					else {
 						gotoxy(--csr_x, csr_y);
@@ -44,6 +44,7 @@ void do_kbd_intr(cpu_state_t * cpu)
 						gotoxy(--csr_x, csr_y);
 						bfr[--inbfr] = 0;
 					}
+					break;
 			case '\n' : 	proccmd(bfr);
 					prompt();
 					inbfr = 0;
