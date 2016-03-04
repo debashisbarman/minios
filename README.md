@@ -15,7 +15,7 @@ Before building the kernel, make sure that the following tools are available in 
 </ul>
 
 ##License
-All the files in this repository are [MIT](http://opensource.org/licenses/MIT) licensed.
+All the files in this repository are [GPL 3.0](http://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
 
 ##Author
 Debashis Barman ([http://www.debashisbarman.in](http://debashisbarman.github.io/))
