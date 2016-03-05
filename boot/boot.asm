@@ -11,6 +11,8 @@ mboot:
 	dd MAGIC
 	dd FLAGS
 	dd CHECKSUM
+	extern end
+	dd end
  
 
 section .bootstrap_stack, nobits	;-----
@@ -25,21 +27,22 @@ section .text	;-----------------------------
 
 global start
 start:
+
+prot_mode:
+	extern prot_init
+	call prot_init
+
 	mov esp, stack_top
- 
 	extern kernel_main
 	call kernel_main
- 
 	cli
 .hang:
 	hlt
 	jmp .hang
 
 global gdt_load
-
-extern gdtp
-
 gdt_load:
+	extern gdtp
 	lgdt [gdtp]
 	jmp 0x08:reload_segments
 
@@ -53,9 +56,7 @@ reload_segments:
 	ret
 
 global idt_load
-
-extern idtp
-
 idt_load:
+	extern idtp
 	lidt [idtp]
 	ret

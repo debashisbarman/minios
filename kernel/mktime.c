@@ -6,13 +6,13 @@
 		inb(0x71); \
 	})
 
-void kernel_mktime(time_t * tm)
+void kernel_mktime(time_t * time)
 {
-	tm->sec = CMOS_READ(0);
-	tm->min = CMOS_READ(2);
-	tm->hour= CMOS_READ(4);
-	tm->dayofweek = CMOS_READ(6);
-	tm->day = CMOS_READ(7);
-	tm->month = CMOS_READ(8);
-	tm->year = CMOS_READ(9);
+	time->sec = CMOS_READ(0);
+	time->min = CMOS_READ(2);
+	time->hour= CMOS_READ(4);
+	time->dayofweek = CMOS_READ(6);
+	time->day = CMOS_READ(7);
+	time->month = CMOS_READ(8);
+	time->year = CMOS_READ(9);
 }

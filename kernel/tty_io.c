@@ -7,8 +7,9 @@
 #include <string.h>
 #include <asm/io.h>
 #include <asm/system.h>
-#include <minios/prot.h>
+#include <minios/head.h>
 #include <minios/tty.h>
+#include <minios/kernel.h>
 
 #define KBD_DATA_PORT   0x60
 
@@ -36,7 +37,7 @@ void do_kbd_intr(cpu_state_t * cpu)
 		ch = toascii(scancode);
 
 		switch (ch) {
-			case '\b' :	if (csr_x < strlen("shell@minios $ ") + 1)
+			case '\b' :	if (csr_x < strlen("minios $ ") + 1)
 						/* do nothing */;
 					else {
 						gotoxy(--csr_x, csr_y);

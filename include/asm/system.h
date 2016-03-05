@@ -19,3 +19,10 @@
 #define cli() __asm__ __volatile__ ("cli")
 #define sti() __asm__ __volatile__ ("sti")
 #define hlt() __asm__ __volatile__ ("hlt")
+
+#define set_trap_gate(n, addr) \
+	intr_gate(n, (unsigned long)addr, 0x0, 0)
+
+#define set_intr_gate(n, addr) \
+	intr_gate(n, (unsigned long)addr, 0x0, 0)
+

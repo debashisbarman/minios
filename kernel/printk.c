@@ -1,6 +1,7 @@
 #include <stddef.h>
 #include <stdarg.h>
 #include <minios/tty.h>
+#include <minios/kernel.h>
 
 static char buf[1024];
 

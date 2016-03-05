@@ -11,6 +11,6 @@ typedef struct {
 	int year;
 } time_t;
 
-extern void kernel_mktime(time_t * time);
+extern void kernel_mktime(time_t *);
 
 #endif

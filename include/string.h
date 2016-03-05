@@ -10,7 +10,7 @@ static inline void * memcpy(void *dest, const void *src, size_t n)
 {
 	const char * sp = (const char *)src;
 	char *dp = (char *) dest;
-	for(int i = 0; i < n; i++) 
+	for(size_t i = 0; i < n; i++) 
 		dp[i] = sp[i];
 	return dp;
 }
@@ -18,7 +18,7 @@ static inline void * memcpy(void *dest, const void *src, size_t n)
 static inline void * memset(void *dest, char val, size_t n)
 {
 	char * dp = (char *)dest;
-	for(int i = 0; i < n; i++)
+	for(size_t i = 0; i < n; i++)
 		dp[i] = val;
 	return dest;
 }
@@ -26,7 +26,7 @@ static inline void * memset(void *dest, char val, size_t n)
 static inline unsigned short * memsetw(unsigned short *dest, unsigned short val, size_t n)
 {
 	unsigned short * dp = (unsigned short *)dest;
-	for(int i = 0; i < n; i++)
+	for(size_t i = 0; i < n; i++)
 		dp[i] = val;
 	return dp;
 }
@@ -44,7 +44,7 @@ static inline void strcpy(void * dest, const void * src)
 	const unsigned char * sp = (const unsigned char *) src;
 	unsigned char * dp = (unsigned char *) dest;
 
-	while (*dp++ = *sp++)
+	while (*dp++ == *sp++)
 		;
 }
 

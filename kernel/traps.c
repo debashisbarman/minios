@@ -6,7 +6,9 @@
  */
 #include <stddef.h>
 #include <asm/io.h>
-#include <minios/prot.h>
+#include <asm/system.h>
+#include <minios/head.h>
+#include <minios/kernel.h>
 
 extern void divide_error();
 extern void debug();

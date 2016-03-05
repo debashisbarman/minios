@@ -32,7 +32,7 @@ mm/mm:
 kernel/kernel: kernel/asm.o kernel/console.o kernel/desc.o \
 	kernel/exit.o kernel/keyboard.o kernel/mktime.o \
 	kernel/panic.o kernel/printk.o kernel/traps.o \
-	kernel/tty_io.o kernel/vsprintf.o
+	kernel/tty_io.o kernel/vsprintf.o kernel/sched.o
 
 init/init: init/main.o
 
@@ -51,3 +51,6 @@ clean:
 
 backup: clean
 	(cd ..;tar -zcvf minios.tar.gz minios)
+
+run:
+	qemu-system-i386 -kernel minios.bin

@@ -6,7 +6,8 @@
  */
 #include <stddef.h>
 #include <asm/io.h>
-#include <minios/prot.h>
+#include <asm/system.h>
+#include <minios/head.h>
 #include <minios/kernel.h>
 
 static const unsigned char base = 0;
@@ -52,8 +53,6 @@ void prot_init(void)
 	idt_load();
 
 	pic_remap();
-
-	set_intr_gate(32, &timer_intr);	/* timer */
 }
 
 void do_ignore_intr(cpu_state_t * cpu)

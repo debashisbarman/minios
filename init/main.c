@@ -1,21 +1,3 @@
-/*
- * Mini Operating System 0.0.01
- * Copyright (C) 2016 Debashis Barman (http://debashisbarman.in)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
 #define __MINIOS_LIBC 1
 #include <stddef.h>
 #include <stdarg.h>
@@ -25,42 +7,15 @@
 #include <asm/io.h>
 #include <asm/system.h>
 #include <minios/tty.h>
-#include <minios/prot.h>
+#include <minios/head.h>
+#include <minios/sched.h>
 #include <minios/mm.h>
+#include <minios/kernel.h>
 
 static char buf[1024];
 
 extern int vsprintf();
-
-void init();
-
-volatile size_t timer_ticks = 0;
-
-/* FIXME: fix the timer_ticks */
-void do_timer_intr(cpu_state_t * cpu)
-{
-	timer_ticks++;
-
-	/* if (timer_ticks % 18 == 0)
-	 *	printk("Time : %d Sec\n", timer_ticks / 18);
-	 */
-
-	if (cpu->int_no >= 40)
-		outb(0xa0, 0x20);
-
-	/* Always send interrupt to master */
-	outb(0x20, 0x20);	
-}
-
-void timer_wait(size_t ticks)
-{
-	unsigned long eticks;
-
-	eticks = timer_ticks + ticks;
-
-	while(timer_ticks < eticks)
-		hlt();
-}
+static void init();
 
 /* This is the kernel entry point */
 void kernel_main()
@@ -69,9 +24,9 @@ void kernel_main()
 	 * Interrupts are still disabled. Do necessary setups, then
 	 * enable them.
 	 */
-	prot_init();
-	trap_init();
 	tty_init();
+	trap_init();
+	sched_init();
 	setup_paging();
 	sti();
 
@@ -92,7 +47,7 @@ static size_t printf(const char *fmt, ...)
         return i;
 }
 
-void init()
+static void init()
 {
 	printf("Initializing...");
 

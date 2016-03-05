@@ -25,7 +25,7 @@
 static unsigned short * video;
 static unsigned char attr = 0x07;
 long pos;
-size_t csr_x = 0; csr_y = 0;
+size_t csr_x = 0, csr_y = 0;
 
 void gotoxy(size_t x, size_t y)
 {
@@ -50,7 +50,7 @@ void clrscr(void)
 
 void puts(const char * str)
 {
-	size_t c, color;
+	size_t c;
 
 	cli();
 
@@ -88,7 +88,7 @@ void puts(const char * str)
 					}			
 		}
 
-		/* Scroll up by one line */
+		/* FIXME : fix this scroll up code */
 		if (csr_y > NR_LINES) {
                 	memcpy((void*)VIDEO_ADDR, (void*)(VIDEO_ADDR + 160), NR_COLUMNS * NR_LINES * 2);
                         for (c = 0; c < 80; c++)

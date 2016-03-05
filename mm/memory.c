@@ -38,10 +38,10 @@ static inline size_t get_free_page(void)
 
 /*
  * Retrieves a pointer to the page required.
- * If make == 1, if the page-table in which this page should
+ * If flag == 1, if the page-table in which this page should
  * reside isn't created, create it!
  */
-static inline page_t * get_page(size_t addr, int flag, page_directory_t * dir)
+static inline page_t * get_page(size_t addr, size_t flag, page_directory_t * dir)
 {
 	addr /= PAGE_SIZE;
 	size_t i = addr / NUM_ENTRIES;
@@ -49,7 +49,7 @@ static inline page_t * get_page(size_t addr, int flag, page_directory_t * dir)
 		return &dir->tables[i]->pages[addr % NUM_ENTRIES];
 	else if (flag) {
 		size_t temp;
-		dir->tables[i] = (page_table_t *)kmalloc_align(PTE_SIZE, &temp);
+		dir->tables[i] = (page_table_t *)kmalloc_align(PTE_SIZE, (size_t) &temp);
 		memset(dir->tables[i], 0, PAGE_SIZE);
 		dir->paddrspc[i] = temp | USER_PRIVILEDGE;
 		return &dir->tables[i]->pages[addr % NUM_ENTRIES];

@@ -8,7 +8,7 @@ extern void timer_wait(size_t ticks);
 
 void prompt(void)
 {
-	printk("\nshell@minios $ ");
+	printk("\nminios $ ");
 }
 
 void shell(void)
@@ -27,17 +27,10 @@ static void reboot(void)
 
 static void about(void)
 {
-	printk("\nWelcome to Mini Operating System, 0.0.01\n");
-	printk("----------------------------------------");
-	printk("\nMini Operating System is an educational operating system with a monolithic \n");
-	printk("kernel design & a clean implementation. it was ");
-	printk("born as an \nundergraduate project designed by Debashis Barman \n(Computer ");
-	printk("Engineering student) at Assam Don Bosco University, India.\n\n");
 	printk("\nName : Mini Operating System");
 	printk("\nDeveloper : Debashis Barman");
 	printk("\nVersion : 0.0.01");
 	printk("\nLicense : GPL 3.0\n");
-	printk("-------------------\n\n");
 }
 
 static void help(void)
@@ -52,9 +45,10 @@ static void help(void)
 
 void proccmd(char * cmd)
 {
-	if (strcmp(cmd, "clear") == 0)
+	if (strcmp(cmd, "clear") == 0) {
 		clrscr();
-	else if (strcmp(cmd, "about") == 0)
+		gotoxy(0, -1);	/* csr_y = -1 because of "\n" in prompt */
+	} else if (strcmp(cmd, "about") == 0)
 		about();
 	else if (strcmp(cmd, "reboot") == 0) {
 		printk("\nrebooting...");
@@ -63,5 +57,5 @@ void proccmd(char * cmd)
 	} else if (strcmp(cmd, "help") == 0)
 		help();
 	else
-		printk("\nshell : %s : command not found\n", cmd);
+		printk("\n%s : command not found\n", cmd);
 }

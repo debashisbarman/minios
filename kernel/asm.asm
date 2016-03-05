@@ -424,8 +424,8 @@ timer_intr:
 	mov eax, esp
 
 	push eax
-	extern do_timer_intr
-	mov eax, do_timer_intr
+	extern do_timer
+	mov eax, do_timer
 	call eax
 	pop eax
 
