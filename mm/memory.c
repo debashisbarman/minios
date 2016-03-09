@@ -1,112 +1,56 @@
-#include <stdbool.h>
+/*
+ * memory.c
+ * 
+ * FIXME : do dynamic allocation and rewrite paging.
+ */
 #include <stddef.h>
-#include <string.h>
 #include <minios/mm.h>
-#include <minios/kernel.h>
 
-#define PDT_SIZE sizeof(page_directory_t)
-#define PTE_SIZE sizeof(page_table_t)
-
-#define PS_4KB 0x0
-#define PS_4MB 0x1
-
-#define USER_PRIVILEDGE	0x7
-
-#define LOW_MEM	0x1000000
-#define HIGH_MEM 0xffffffff
-
-page_directory_t *kd = 0;
-page_directory_t *cd = 0;
-
-/*
- * Get physical address of first free page, and mark it
- * used.
+/* 
+ * name     | size  | description
+ * -----------------------------------------
+ * Address  | 31-12 | Physical address of the page, or the page table
+ * Avail    |  11-9 | Available for kernel use 
+ * Reserved |   8-7 | Used by CPU internally
+ * D        |     6 | Dirty flag
+ * A        |     5 | Set if page has been accessed
+ * Reserved |   4-3 | Used by CPU internally
+ * U/S      |     2 | User/supervisor priviledge
+ * R/W      |     1 | Read/write flag
+ * P        |     0 | Present flag
  */
-static inline size_t get_free_page(void)
-{
-	/* FIXME: please make this code more beautiful */
-	for (size_t i = 0; i < index(nr_frames); i++) {
-		if (mem_map[i] != HIGH_MEM) {
-			for (size_t j = 0; j < 32; j++) {
-				if (!(mem_map[i] & (0x1 << j)))
-					return i * 32 + j;
-			}
-		}
-	}
-	return (size_t)-1;
-}
 
-/*
- * Retrieves a pointer to the page required.
- * If flag == 1, if the page-table in which this page should
- * reside isn't created, create it!
- */
-static inline page_t * get_page(size_t addr, size_t flag, page_directory_t * dir)
-{
-	addr /= PAGE_SIZE;
-	size_t i = addr / NUM_ENTRIES;
-	if (dir->tables[i])
-		return &dir->tables[i]->pages[addr % NUM_ENTRIES];
-	else if (flag) {
-		size_t temp;
-		dir->tables[i] = (page_table_t *)kmalloc_align(PTE_SIZE, (size_t) &temp);
-		memset(dir->tables[i], 0, PAGE_SIZE);
-		dir->paddrspc[i] = temp | USER_PRIVILEDGE;
-		return &dir->tables[i]->pages[addr % NUM_ENTRIES];
-	} else
-		return 0;
-}
+#define PAGE_SIZE		4096
+#define NUM_PAGE_TABLE_ENTRY	1024
 
-/* Allocate a frame in physical memory */
-static inline void alloc_frame(page_t * page, size_t kpl, size_t rw)
-{
-	if (page->frame != 0)
-		return;
-	else {
-		size_t i = get_free_page();
-		if (i == (size_t)-1)
-			panic("No free frames!");
-		set_bit(i * PAGE_SIZE);
-		page->present = 1;
-		page->rw = rw ? 1 : 0;
-		page->user = kpl ? 0 : 1;
-		page->frame = i;
-	}
-}
+#define PA_KERNEL_PRESENT	0x3	/* 011 */
+#define PA_KERNEL_NOT_PRESENT 	0x2	/* 010 */
 
-/* Free a page from physical memory */
-static inline void free_frame(page_t * page)
-{
-	size_t frame;
-	if (!(frame = page->frame))
-		return;
-	else {
-		unset_bit(frame);
-		page->frame = 0x0;
-	}
-}
+/* (static) global objects with GCC extension "__attribute__((align(4096)))" */
+unsigned long page_directory[NUM_PAGE_TABLE_ENTRY] __attribute__((aligned(PAGE_SIZE)));
+unsigned long page_table[NUM_PAGE_TABLE_ENTRY] __attribute__((aligned(PAGE_SIZE)));
 
-/*
- * Sets up the environment, page directories etc and
- * enables paging.
- */
 void setup_paging(void)
 {
-	nr_frames = LOW_MEM / PAGE_SIZE;
-	mem_map = (size_t *)kmalloc(index(nr_frames));
-	memset(mem_map, 0, index(nr_frames));
+	unsigned long paddr = 0x00000000;	/* Physical address of the page */
 
-	kd = (page_directory_t *)kmalloc(PDT_SIZE);
-	memset(kd, 0, sizeof(PDT_SIZE));
-	cd = kd;
+	/* Map the first 4MB of memory */
+	for(size_t i = 0; i < NUM_PAGE_TABLE_ENTRY; i++) {
+		page_table[i] = ((unsigned long) paddr) | PA_KERNEL_PRESENT;	/* supervisor, r/w, present */
+		paddr = paddr + PAGE_SIZE;
+	};
 
-	size_t i = 0;
-	while (i < placement_address) {
-		alloc_frame(get_page(i, 1, kd), 0, 0);
-		i += PAGE_SIZE;
-	}
+	/* Fill the first entry of the page directory */
+	page_directory[0] = page_table;
+	page_directory[0] = page_directory[0] | PA_KERNEL_PRESENT;
 
-	load_page_directory(kd->paddrspc);
+	/* Fill the rest of the page directory */
+	for(size_t i = 1; i < NUM_PAGE_TABLE_ENTRY; i++)
+		page_directory[i] = 0 | PA_KERNEL_NOT_PRESENT;
 
+	/* Put that page directory address into CR3 */
+	load_page_directory(page_directory);
+
+	/* Set the paging bit in CR0 to 1 */
 	enable_paging();
-}
+};

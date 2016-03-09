@@ -121,7 +121,7 @@ void do_general_protection()
 	panic("General protection fault");
 }
 
-void do_page_fault(cpu_state_t * cpu)
+void do_page_fault(struct cpu_state * cpu)
 {
 	size_t fault_addr;
 	__asm__ __volatile__("mov %%cr2, %0":"=r"(fault_addr));

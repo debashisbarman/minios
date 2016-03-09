@@ -17,7 +17,7 @@ char bfr[256];
 size_t inbfr = 0;
 
 /* Handles the keyboard interrupt */
-void do_kbd_intr(cpu_state_t * cpu)
+void do_kbd_intr(struct cpu_state * cpu)
 {
 	unsigned char scancode;
 	char ch;

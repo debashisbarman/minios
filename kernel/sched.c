@@ -7,28 +7,28 @@
  * TODO: do some actual multitasking...
  */
 #include <stddef.h>
+#include <stdbool.h>
 #include <asm/io.h>
 #include <asm/system.h>
 #include <minios/head.h>
 #include <minios/sched.h>
 #include <minios/kernel.h>
 
+static const unsigned char segsel_kernel_cs = 0x08;
+
 unsigned long interval = 40;	/* min should be 40 */
 volatile size_t jiffies = 0;
 
-void do_timer(cpu_state_t * cpu)
+void do_timer(void)
 {
 	jiffies++;
 
 	/* if (jiffies % 18 == 0)
-	 *	printk("\nTime : %d Sec", jiffies / 18);
+	 *	printk("\nTime : %d Sec", jiffies / 18);	
 	 */
 
-	if (cpu->int_no >= 40)
-		outb(0xa0, 0x20);
-
-	/* Always send interrupt to master */
-	outb(0x20, 0x20);	
+	/* Send acknowledge to pic master */
+	outb(0x20, 0x20);
 }
 
 void timer_wait(size_t ticks)

@@ -47,11 +47,35 @@ extern void idt_load(void);
 extern void intr_gate(size_t n, unsigned long off, unsigned char dpl, unsigned char type);
 extern void ignore_intr(void);
 
-typedef struct {
-	unsigned int gs, fs, es, ds;
-	unsigned int edi, esi, ebp, esp, ebx, edx, ecx, eax;
-	unsigned int int_no, error_code;
-	unsigned int eip, cs, eflags, useresp, ss; 
-} cpu_state_t;
+struct cpu_state {
+	/* segment registers */
+	unsigned long gs;
+	unsigned long fs;
+	unsigned long es;
+	unsigned long ds;
+	unsigned long cs;
+	unsigned long ss;
+
+	/* data registers */
+	unsigned long eax;
+	unsigned long ebx;
+	unsigned long ecx;
+	unsigned long edx;
+
+	/* index registers */
+	unsigned long esi;
+	unsigned long edi;
+
+	/* pointer registers */
+	unsigned long eip;
+	unsigned long esp;	/* user esp */
+	unsigned long ebp; 
+
+	/* control flags */
+	unsigned long eflags;
+
+	unsigned long int_no;	/* interrupt number */
+	unsigned long error_code;
+};
 
 #endif

@@ -55,7 +55,7 @@ void prot_init(void)
 	pic_remap();
 }
 
-void do_ignore_intr(cpu_state_t * cpu)
+void do_ignore_intr(struct cpu_state * cpu)
 {
 	printk("Interrupt #%d\n", cpu->int_no);
 }

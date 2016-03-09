@@ -11,8 +11,6 @@ mboot:
 	dd MAGIC
 	dd FLAGS
 	dd CHECKSUM
-	extern end
-	dd end
  
 
 section .bootstrap_stack, nobits	;-----
@@ -32,13 +30,16 @@ prot_mode:
 	extern prot_init
 	call prot_init
 
+	extern setup_paging
+	call setup_paging
+
 	mov esp, stack_top
 	extern kernel_main
 	call kernel_main
 	cli
-.hang:
+hang:
 	hlt
-	jmp .hang
+	jmp hang
 
 global gdt_load
 gdt_load:
