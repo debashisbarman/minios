@@ -1,7 +1,7 @@
 #ifndef _TIME_H
 #define _TIME_H
 
-typedef struct {
+struct time{
 	int sec;
 	int min;
 	int hour;
@@ -9,8 +9,8 @@ typedef struct {
 	int day;
 	int month;
 	int year;
-} time_t;
+};
 
-extern void kernel_mktime(time_t *);
+extern void kernel_mktime(struct time *);
 
 #endif

@@ -37,7 +37,7 @@ void do_kbd_intr(struct cpu_state * cpu)
 		ch = toascii(scancode);
 
 		switch (ch) {
-			case '\b' :	if (csr_x < strlen("minios $ ") + 1)
+			case '\b' :	if (csr_x < strlen("minios $ ") + 1)	/* + 1 for the space */
 						/* do nothing */;
 					else {
 						gotoxy(--csr_x, csr_y);

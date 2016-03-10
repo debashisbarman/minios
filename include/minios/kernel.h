@@ -8,6 +8,10 @@
 typedef unsigned long size_t;
 #endif
 
+#ifndef VERSION
+#define VERSION "0.0.1"
+#endif
+
 extern int vsprintf(char *buf, const char *fmt, va_list args);
 extern size_t printk(const char *fmt, ...);
 extern void panic(const char * str);

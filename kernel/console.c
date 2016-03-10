@@ -88,8 +88,7 @@ void puts(const char * str)
 					}			
 		}
 
-		/* FIXME : fix this scroll up code */
-		if (csr_y > NR_LINES) {
+		if (csr_y >= NR_LINES) {
                 	memcpy((void*)VIDEO_ADDR, (void*)(VIDEO_ADDR + 160), NR_COLUMNS * NR_LINES * 2);
                         for (c = 0; c < 80; c++)
                         	video[NR_COLUMNS * (NR_LINES - 1) + c] = ' ' | (attr << 8);

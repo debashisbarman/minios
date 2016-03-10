@@ -18,7 +18,7 @@ extern int vsprintf();
 static void init();
 
 /* This is the kernel entry point */
-void kernel_main()
+void main()
 {	
 	/*
 	 * Interrupts are still disabled. Do necessary setups, then
@@ -48,14 +48,15 @@ static size_t printf(const char *fmt, ...)
 
 static void init()
 {
-	printf("Initializing...\n");
+	printf("Initializing ...\n");
 	timer_wait(50);
 	printf("\n[OK]");
 	timer_wait(10);
 	clrscr();
 
-	/* FIXME: say something more interesting... */
-	printf("Hello, world! Welcome to Mini Operating System 0.0.01.\n");
-
+	printf("Welcome to Minios %s (initial-release)\n", VERSION);
+	printf("\n * Documentation : https://github.com/debashisbarman/minios/README.md\n");
+	printf("\nMinios %s is an educational operating system for x86 machines \n", VERSION);
+	printf("written in C and Assembly and developed by Debashis Barman.\n");
 	shell();
 }

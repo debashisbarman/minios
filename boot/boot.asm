@@ -23,8 +23,8 @@ stack_top:
 
 section .text	;-----------------------------
 
-global start
-start:
+global _start
+_start:
 
 prot_mode:
 	extern prot_init
@@ -34,8 +34,8 @@ prot_mode:
 	call setup_paging
 
 	mov esp, stack_top
-	extern kernel_main
-	call kernel_main
+	extern main
+	call main
 	cli
 hang:
 	hlt
