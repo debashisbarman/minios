@@ -3,7 +3,7 @@ Mini Operating System is a educational operating system with monolithic kernel d
 
 Send comments and bug reports to [deb.dbuniversity@gmail.com](mailto:deb.dbuniversity@gmail.com).
 
-##Tools
+## Tools
 Before building the kernel, make sure that the following tools are available in your system.
 <ul>
 <li>An x86 computer (of course)</li>
@@ -14,8 +14,8 @@ Before building the kernel, make sure that the following tools are available in 
 <li>grub</li>
 </ul>
 
-##License
+## License
 All the files in this repository are [GPL 3.0](http://www.gnu.org/licenses/gpl-3.0.en.html) licensed.
 
-##Author
+## Author
 Debashis Barman ([http://www.debashisbarman.in](http://debashisbarman.github.io/))
